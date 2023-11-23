@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>D3 Vis</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="//unpkg.com/3d-force-graph"></script>
+    <link rel="stylesheet" href="d3-vis.css" />
+  </head>
+  <body>
+    <div>
+      <label for="edge_count">Edge count:</label>
+      <input type="number" id="edge_count" name="edge_count" value="1300" />
+    </div>
+    <div>
+      <label for="gene_or_connection">Gene/Connection search:</label>
+      <input type="text" id="gene_or_connection" name="gene_or_connection" />
+      <div id="gene_or_connection_results"></div>
+    </div>
+    <div id="graph"></div>
+    <div id="histogram"></div>
+    <div id="3d-graph"></div>
+    <script type="module">
+      import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+      import { callBackend } from "./modules/backend.js";
+      import { fuzzySearch } from "./modules/fuzzysearch.js";
+      import { svg, setSvg, data, setData } from "./globalvars.js";
+      window.onload = function () {
+        const margin = { top: 10, right: 10, bottom: 10, left: 10 };
+        const width = 1000 - margin.left - margin.right;
+        const height = 700 - margin.top - margin.bottom;
+        setSvg(
+          d3
+            .select("#graph")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .style("border-style", "solid")
+        );
+        callBackend(1300);
+
+        $.ajax({
+          type: "GET",
+          url: "http://127.0.0.1:8000/data/json/" + 1300,
+          success: (data) => {
+            const myGraph = ForceGraph3D()(document.getElementById("3d-graph"))
+              .graphData(data)
+              .nodeLabel("id");
+          },
+        });
+      };
+      fuzzySearch;
+
+      document.querySelector("#edge_count").addEventListener("change", (e) => {
+        callBackend(e.target.value);
+      });
+    </script>
+  </body>
+</html>

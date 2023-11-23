@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+body {
+    font-family: 'Open Sans', sans-serif;
+}
+
+#gene_or_connection_results {
+    position: block;
+    list-style: none;
+    height: 5rem;
+    border-radius: 3px;
+    overflow-y: scroll;
+  }
+.gene_or_connection_results li {
+    position: relative;
+    list-style: none;
+    padding: 1rem;
+    border: solid black 1px;
+    display: block;
+    cursor: pointer;
+  }
