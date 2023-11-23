@@ -1,10 +1,12 @@
 import { data, setData } from "../globalvars.js";
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+import { load3D } from "./3d.js";
 export function loadHistogram() {
   // set the dimensions and margins of the graph
-  var margin = { top: 10, right: 30, bottom: 20, left: 50 },
+  var margin = { top: 10, right: 30, bottom: 100, left: 50 },
     width = 10000 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
+  d3.select("#histogram").selectAll("*").remove();
 
   // append the svg object to the body of the page
   var svg = d3
@@ -63,14 +65,18 @@ export function loadHistogram() {
     maxVal = Math.max(maxVal, aSum);
     return aSum - bSum;
   });
-  console.log(input);
 
   // add X axis
   var x = d3.scaleBand().domain(groups).range([0, width]).padding(0.2);
   svg
     .append("g")
     .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x).tickSizeOuter(0));
+    .call(d3.axisBottom(x).tickSizeOuter(0))
+    .selectAll("text")
+    .style("text-anchor", "end")
+    .attr("dx", "-.8em")
+    .attr("dy", ".15em")
+    .attr("transform", "rotate(-65)");
 
   // add Y axis
   var y = d3
@@ -108,5 +114,15 @@ export function loadHistogram() {
     .attr("height", function (d) {
       return y(d[0]) - y(d[1]);
     })
-    .attr("width", x.bandwidth());
+    .attr("width", x.bandwidth())
+    .on("click", function (d) {
+      load3D(d.target.__data__.data["ligand-receptor"]);
+    });
+
+  let brush = d3.brush().on("start brush", handleBrush);
+  let brushExtent;
+  function handleBrush(e) {
+    brushExtent = e.selection;
+  }
+  svg.call(brush);
 }

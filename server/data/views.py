@@ -188,8 +188,10 @@ def load_json(request, edge):
             label_str = label_str + 'acinar_reactive'
         t = {
             "id": ids[i],
-            "fx": (x_index[i] - x_min + 100) / 12,
-            "fy": (y_index[i] - y_min + 100) / 12,
+            # "fx": (x_index[i] - x_min + 100) / 12,
+            # "fy": (y_index[i] - y_min + 100) / 12,
+            "fx": (x_index[i] - x_min) / 5 - 1000,
+            "fy": (y_index[i] - y_min) / 5 - 800,
             "fz": 0,
             "color": matplotlib.colors.rgb2hex(colors_point[i]),
             "shape": marker_size,

@@ -1,5 +1,7 @@
 import { loadNetwork } from "./network.js";
+import { data } from "../globalvars.js";
 import Fuse from "https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.esm.js";
+import { load3D } from "./3d.js";
 export var fuzzySearch = document
   .querySelector("#gene_or_connection")
   .addEventListener("change", (e) => {
@@ -20,7 +22,8 @@ export var fuzzySearch = document
       let b = document.createElement("li");
       b.innerHTML = result[i].item;
       b.addEventListener("click", function () {
-        loadNetwork(b.innerHTML);
+        load3D(b.innerHTML);
+        //loadNetwork(b.innerHTML);
       });
       document.querySelector("#gene_or_connection_results").appendChild(b);
     }

@@ -1,5 +1,6 @@
 import { loadNetwork } from "./network.js";
 import { loadHistogram } from "./histogram.js";
+import { load3D } from "./3d.js";
 import { svg, setSvg, data, setData } from "../globalvars.js";
 export async function callBackend(nodeCount) {
   await $.ajax({
@@ -8,7 +9,8 @@ export async function callBackend(nodeCount) {
     success: (data) => {
       setData(data);
       loadHistogram();
-      loadNetwork("NULL");
+      load3D("NULL");
+      //loadNetwork("NULL");
       console.log("loaded " + nodeCount);
     },
   });
