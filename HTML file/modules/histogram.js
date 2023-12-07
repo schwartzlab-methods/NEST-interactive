@@ -1,11 +1,35 @@
 import { data, setData } from "../globalvars.js";
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 import { load3D } from "./3d.js";
-export function loadHistogram() {
+export function loadHistogram(filter) {
+  let dataCpy = data;
+  if (filter != "NULL") {
+    let newData = JSON.parse(JSON.stringify(data));
+    if (filter.indexOf("-") > -1) {
+      for (let i = 0; i < newData.links.length; i++) {
+        if (newData.links[i]["ligand-receptor"] != filter) {
+          newData.links.splice(i, 1);
+          i--;
+        }
+      }
+    } else {
+      for (let i = 0; i < newData.links.length; i++) {
+        if (
+          newData.links[i]["ligand"] != filter &&
+          newData.links[i]["receptor"] != filter
+        ) {
+          newData.links.splice(i, 1);
+          i--;
+        }
+      }
+    }
+    dataCpy = newData;
+  }
+
   // set the dimensions and margins of the graph
-  var margin = { top: 10, right: 30, bottom: 100, left: 50 },
-    width = 10000 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+  let margin = { top: 10, right: 30, bottom: 100, left: 50 },
+    width = ($(window).width() * 11) / 12 - margin.left - margin.right,
+    height = ($(window).height() * 4) / 6 - margin.top - margin.bottom;
   d3.select("#histogram").selectAll("*").remove();
 
   // append the svg object to the body of the page
@@ -20,11 +44,11 @@ export function loadHistogram() {
   // list of subgroups
   let comp_set = new Set();
   let color_set = new Set();
-  for (let i in data.links) {
-    comp_set.add(data.links[i]["component"]);
+  for (let i in dataCpy.links) {
+    comp_set.add(dataCpy.links[i]["component"]);
 
     color_set.add(
-      data.nodes.find((x) => x.id === data.links[i]["source"]).color
+      dataCpy.nodes.find((x) => x.id === dataCpy.links[i]["source"]).color
     );
   }
   var subgroups = Array.from(comp_set);
@@ -32,8 +56,8 @@ export function loadHistogram() {
 
   // list of groups
   let lig_rec_set = new Set();
-  for (let i in data.links) {
-    lig_rec_set.add(data.links[i]["ligand-receptor"]);
+  for (let i in dataCpy.links) {
+    lig_rec_set.add(dataCpy.links[i]["ligand-receptor"]);
   }
   var groups = Array.from(lig_rec_set);
 
@@ -44,27 +68,35 @@ export function loadHistogram() {
       input[i][subgroups.at(j)] = 0;
     }
   }
-  for (let i in data.links) {
+  for (let i in dataCpy.links) {
     for (let j in input) {
-      if (input[j]["ligand-receptor"] == data.links[i]["ligand-receptor"]) {
-        input[j][data.links[i]["component"]] += 1;
+      if (input[j]["ligand-receptor"] == dataCpy.links[i]["ligand-receptor"]) {
+        input[j][dataCpy.links[i]["component"]] += 1;
         break;
       }
     }
   }
-  let maxVal = 0;
+
   input.sort((a, b) => {
     let aSum = 0,
       bSum = 0;
-    for (let i in a) {
-      if (i != "ligand-receptor") aSum += a[i];
+    for (let k in a) {
+      if (k != "ligand-receptor") aSum += a[k];
+      if (k != "ligand-receptor") bSum += b[k];
     }
-    for (let j in b) {
-      if (j != "ligand-receptor") bSum += b[j];
-    }
-    maxVal = Math.max(maxVal, aSum);
     return aSum - bSum;
   });
+  let groupsCpy = [];
+  let maxVal = 0;
+  for (let i = input.length - 1; i >= 0; i--) {
+    let sum = 0;
+    for (let k in input[i]) {
+      if (k != "ligand-receptor") sum += input[i][k];
+    }
+    maxVal = Math.max(sum, maxVal);
+    groupsCpy.push(input[i]["ligand-receptor"]);
+  }
+  groups = groupsCpy;
 
   // add X axis
   var x = d3.scaleBand().domain(groups).range([0, width]).padding(0.2);
@@ -88,7 +120,11 @@ export function loadHistogram() {
   // color palette = one color per subgroup
   var color = d3.scaleOrdinal().domain(subgroups).range(colors);
 
-  var stackedData = d3.stack().keys(subgroups)(input);
+  var stackedData = d3
+    .stack()
+    .keys(subgroups)
+    .order(d3.stackOrderNone)
+    .offset(d3.stackOffsetNone)(input);
 
   svg
     .append("g")
@@ -123,6 +159,7 @@ export function loadHistogram() {
   let brushExtent;
   function handleBrush(e) {
     brushExtent = e.selection;
+    console.log(e.selection);
   }
   svg.call(brush);
 }

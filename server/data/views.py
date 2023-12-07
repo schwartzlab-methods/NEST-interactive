@@ -98,7 +98,6 @@ def load_json(request, edge):
         i = csv_record_final[k][6]
         j = csv_record_final[k][7]
         connecting_edges[i][j]=1
-            
     graph = csr_matrix(connecting_edges)
     n_components, labels = connected_components(csgraph=graph,directed=True, connection = 'weak',  return_labels=True) # It assigns each SPOT to a component based on what pair it belongs to
     #print('number of connected components %d'%n_components)
@@ -129,7 +128,6 @@ def load_json(request, edge):
         i = csv_record_final[record][6]
         label = barcode_info[i][3]
         csv_record_final[record][5] = label
-    
     
     component_list = dict()
     for record_idx in range (1, len(csv_record_final)-1): #last entry is a dummy for histograms, so ignore it.
@@ -205,15 +203,15 @@ def load_json(request, edge):
         j = csv_record_final[k][7]
         ligand = csv_record_final[k][2]
         receptor = csv_record_final[k][3]
-        edge_score = csv_record_final[k][8] 
-        title_str =  "L:" + ligand + ", R:" + receptor+ ", "+ str(edge_score)
+        edge_rank = csv_record_final[k][4] 
+        title_str =  "L:" + ligand + ", R:" + receptor+ ", "+ str(edge_rank)
         t = {
             "source": i,
             "target": j,
             "ligand": ligand,
             "receptor": receptor,
             "label": title_str,
-            "value": np.float64(edge_score),
+            "value": np.float64(edge_rank),
             "ligand-receptor": ligand+"-"+receptor,
             "component": barcode_info[i][3]
         }

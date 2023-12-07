@@ -7,26 +7,85 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="//unpkg.com/3d-force-graph"></script>
     <script src="//unpkg.com/three"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="d3-vis.css" />
   </head>
   <body>
-    <div>
-      <label for="edge_count">Edge count:</label>
-      <input type="number" id="edge_count" name="edge_count" value="1300" />
+    <div class="ml-4 my-8 w-11/12">
+      <h1 class="text-3xl py-5">NEST Interactive</h1>
+      <div>
+        <label for="edge_count" class="text-base font-bold mb-2 py-2"
+          >Edge count:</label
+        >
+        <input
+          type="number"
+          id="edge_count"
+          name="edge_count"
+          value="1300"
+          class="shadow appearance-none border rounded py-2 px-3"
+        />
+      </div>
+      <div class="pt-3 block">
+        <label for="colour_picker" class="text-base font-bold mb-2 py-2"
+          >Colour Picker:</label
+        >
+        <input
+          type="color"
+          id="colour_picker"
+          name="colour_picker"
+          class="p-1 h-10 w-14 bg-white border border-gray-200 cursor-pointer w-10 rounded-lg"
+          value="#f4f5de"
+          title="Choose your color"
+        />
+      </div>
+      <div class="mt-3">
+        <label for="gene_or_connection" class="text-base font-bold"
+          >Gene/Connection search:</label
+        >
+      </div>
+      <div id="search_div" class="w-full h-auto mb-3">
+        <div class="relative mt-1">
+          <div
+            class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
+          >
+            <svg
+              class="w-4 h-4 text-gray-500 dark:text-gray-400"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 20 20"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+              />
+            </svg>
+          </div>
+          <input
+            type="text"
+            id="gene_or_connection"
+            name="gene_or_connection"
+            class="shadow appearance-none border w-full rounded pl-10 py-2 px-3"
+          />
+        </div>
+        <div
+          id="gene_or_connection_results"
+          class="absolute overflow-auto w-11/12 max-h-40 bg-white divide-y divide-black-100 rounded-lg shadow results"
+          style="z-index: 1"
+        ></div>
+      </div>
+      <!--<div id="graph"></div>-->
+      <div id="graph-3d" class="border-solid"></div>
+      <div id="histogram" class="mt-5"></div>
     </div>
-    <div>
-      <label for="gene_or_connection">Gene/Connection search:</label>
-      <input type="text" id="gene_or_connection" name="gene_or_connection" />
-      <div id="gene_or_connection_results"></div>
-    </div>
-    <!--<div id="graph"></div>-->
-    <div id="graph-3d"></div>
-    <div id="histogram"></div>
     <script type="module">
       import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
       import { callBackend } from "./modules/backend.js";
       import { fuzzySearch } from "./modules/fuzzysearch.js";
-      import { setSvg, setElement3D } from "./globalvars.js";
+      import { graph3D, setSvg, setElement3D } from "./globalvars.js";
       window.onload = function () {
         const margin = { top: 10, right: 10, bottom: 10, left: 10 };
         const width = 1000 - margin.left - margin.right;
@@ -47,6 +106,30 @@
       document.querySelector("#edge_count").addEventListener("change", (e) => {
         callBackend(e.target.value);
       });
+
+      document
+        .querySelector("#colour_picker")
+        .addEventListener("change", (e) => {
+          graph3D.backgroundColor(e.target.value);
+        });
+
+      document
+        .getElementById("gene_or_connection")
+        .addEventListener("click", (e) => {
+          var results = document.getElementById("gene_or_connection_results");
+          if (!results.classList.contains("show")) {
+            results.classList.add("show");
+          }
+        });
+
+      window.onclick = function (event) {
+        if (!(event.target.id == "gene_or_connection")) {
+          var results = document.getElementById("gene_or_connection_results");
+          if (results.classList.contains("show")) {
+            results.classList.remove("show");
+          }
+        }
+      };
     </script>
   </body>
 </html>

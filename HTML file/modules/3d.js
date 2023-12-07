@@ -1,15 +1,16 @@
 import {
   data,
+  nodeCount,
   graph3D,
   setGraph3D,
   graphdata,
   setGraphdata,
   element3D,
 } from "../globalvars.js";
+
 export function load3D(filter) {
   if (filter != "NULL") {
     let newData = jQuery.extend(true, {}, graphdata);
-    console.log(newData);
     let nodeSet = new Set();
     if (filter.indexOf("-") > -1) {
       for (let i = 0; i < newData.links.length; i++) {
@@ -49,6 +50,10 @@ export function load3D(filter) {
       return d.source.color;
     });
   } else {
+    let map = new Map();
+    for (let i in data.links) {
+      map.set(data.links[i].label, Math.random() * Math.PI * 2);
+    }
     let graph = ForceGraph3D()(element3D)
       .nodeThreeObject(
         ({ shape, color }) =>
@@ -64,8 +69,8 @@ export function load3D(filter) {
           )
       )
       .graphData(JSON.parse(JSON.stringify(data)))
-      .width(1200)
-      .height(600)
+      .width(($(window).width() * 11) / 12)
+      .height(($(window).height() * 11) / 12)
       .backgroundColor("#F5F5DC")
       .nodeLabel("id")
       .linkOpacity(1)
@@ -74,11 +79,16 @@ export function load3D(filter) {
         return data.nodes[d.source].color;
       })
       .linkDirectionalArrowLength((d) => {
-        return d.value * 10;
+        return (d.value / nodeCount) * 50;
+      })
+      .linkCurvature(1)
+      .linkCurveRotation((d) => {
+        //console.log(d.label);
+        return map.get(d.label);
       })
       .linkDirectionalArrowRelPos(1)
       .linkWidth((d) => {
-        return d.value * 3;
+        return (d.value / nodeCount) * 15;
       });
     setGraph3D(graph);
     setGraphdata(graph.graphData());

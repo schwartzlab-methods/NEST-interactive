@@ -1,17 +1,18 @@
 import { loadNetwork } from "./network.js";
 import { loadHistogram } from "./histogram.js";
 import { load3D } from "./3d.js";
-import { svg, setSvg, data, setData } from "../globalvars.js";
-export async function callBackend(nodeCount) {
+import { svg, setSvg, data, setData, setNodeCount } from "../globalvars.js";
+export async function callBackend(nodeC) {
   await $.ajax({
     type: "GET",
-    url: "http://127.0.0.1:8000/data/json/" + nodeCount,
+    url: "http://127.0.0.1:8000/data/json/" + nodeC,
     success: (data) => {
+      setNodeCount(nodeC);
       setData(data);
-      loadHistogram();
+      loadHistogram("NULL");
       load3D("NULL");
       //loadNetwork("NULL");
-      console.log("loaded " + nodeCount);
+      console.log("loaded " + nodeC);
     },
   });
 }
