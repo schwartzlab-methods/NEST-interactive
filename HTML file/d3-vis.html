@@ -43,39 +43,46 @@
           >Gene/Connection search:</label
         >
       </div>
-      <div id="search_div" class="w-full h-auto mb-3">
-        <div class="relative mt-1">
-          <div
-            class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
-          >
-            <svg
-              class="w-4 h-4 text-gray-500 dark:text-gray-400"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 20 20"
+      <div>
+        <div id="search_div" class="w-full h-auto mb-3">
+          <div class="relative mt-1">
+            <div
+              class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
             >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-              />
-            </svg>
+              <svg
+                class="w-4 h-4 text-gray-500 dark:text-gray-400"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                />
+              </svg>
+            </div>
+            <input
+              type="text"
+              id="gene_or_connection"
+              name="gene_or_connection"
+              class="shadow appearance-none border w-11/12 rounded pl-10 py-2 px-3"
+            />
+            <button
+              class="shadow appearance-none border bg-blue-200 rounded pl-10 py-2 px-3"
+            >
+              <p class="w-full text-center">Clear</p>
+            </button>
           </div>
-          <input
-            type="text"
-            id="gene_or_connection"
-            name="gene_or_connection"
-            class="shadow appearance-none border w-full rounded pl-10 py-2 px-3"
-          />
+          <div
+            id="gene_or_connection_results"
+            class="absolute overflow-auto w-11/12 max-h-40 bg-white divide-y divide-black-100 rounded-lg shadow results"
+            style="z-index: 1"
+          ></div>
         </div>
-        <div
-          id="gene_or_connection_results"
-          class="absolute overflow-auto w-11/12 max-h-40 bg-white divide-y divide-black-100 rounded-lg shadow results"
-          style="z-index: 1"
-        ></div>
       </div>
       <!--<div id="graph"></div>-->
       <div id="graph-3d" class="border-solid"></div>

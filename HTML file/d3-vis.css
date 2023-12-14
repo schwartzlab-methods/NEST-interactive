@@ -9,3 +9,7 @@ body {
 }
 
 .show {display:block;}
+
+input[type=text]::-webkit-search-cancel-button {
+  -webkit-appearance: searchfield-cancel-button;
+}
