@@ -13,3 +13,7 @@ body {
 input[type=text]::-webkit-search-cancel-button {
   -webkit-appearance: searchfield-cancel-button;
 }
+
+#gene_or_connection_results:hover {
+  cursor: pointer;
+}

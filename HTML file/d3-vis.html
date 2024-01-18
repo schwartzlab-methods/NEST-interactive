@@ -65,17 +65,20 @@
                 />
               </svg>
             </div>
-            <input
-              type="text"
-              id="gene_or_connection"
-              name="gene_or_connection"
-              class="shadow appearance-none border w-11/12 rounded pl-10 py-2 px-3"
-            />
-            <button
-              class="shadow appearance-none border bg-blue-200 rounded pl-10 py-2 px-3"
-            >
-              <p class="w-full text-center">Clear</p>
-            </button>
+            <div class="w-full">
+              <input
+                type="text"
+                id="gene_or_connection"
+                name="gene_or_connection"
+                class="shadow appearance-none border rounded pl-10 py-2 px-3"
+              />
+              <button
+                class="shadow appearance-none border bg-blue-200 rounded py-2 px-3"
+                id="clear_search"
+              >
+                <p class="w-full text-center">Clear</p>
+              </button>
+            </div>
           </div>
           <div
             id="gene_or_connection_results"
@@ -106,7 +109,7 @@
             .style("border-style", "solid")
         );
         setElement3D(document.getElementById("graph-3d"));
-        callBackend(1300);
+        callBackend(0);
       };
       fuzzySearch;
 
@@ -119,6 +122,12 @@
         .addEventListener("change", (e) => {
           graph3D.backgroundColor(e.target.value);
         });
+
+      document.querySelector("#clear_search").addEventListener("click", (e) => {
+        document.querySelector("#gene_or_connection").value = "";
+        document.querySelector("#gene_or_connection_results").innerHTML = "";
+        callBackend(1300);
+      });
 
       document
         .getElementById("gene_or_connection")

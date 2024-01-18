@@ -61,8 +61,16 @@ export function load3D(filter) {
             [
               new THREE.SphereGeometry(8),
               new THREE.BoxGeometry(16, 16, 16),
+              new THREE.CapsuleGeometry(8, 16),
               new THREE.CylinderGeometry(8, 8, 16),
-            ][shape == "circle" ? 0 : shape == "box" ? 1 : 2],
+              new THREE.IcosahedronGeometry(8),
+              new THREE.LatheGeometry(8),
+              new THREE.OctahedronGeometry(8),
+              new THREE.DodecahedronGeometry(16),
+              new THREE.ConeGeometry(8, 16),
+              new THREE.TorusGeometry(8, 2),
+              new THREE.TorusKnotGeometry(8, 2),
+            ][shape % 11],
             new THREE.MeshLambertMaterial({
               color: color,
             })
@@ -72,7 +80,6 @@ export function load3D(filter) {
       .width(($(window).width() * 11) / 12)
       .height(($(window).height() * 11) / 12)
       .backgroundColor("#F5F5DC")
-      .nodeLabel("id")
       .linkOpacity(1)
       .linkLabel("value")
       .linkColor((d) => {
