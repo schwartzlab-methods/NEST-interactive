@@ -76,26 +76,26 @@ export function load3D(filter) {
             })
           )
       )
+      .nodeLabel("label")
       .graphData(JSON.parse(JSON.stringify(data)))
       .width(($(window).width() * 11) / 12)
       .height(($(window).height() * 11) / 12)
       .backgroundColor("#F5F5DC")
       .linkOpacity(1)
-      .linkLabel("value")
+      .linkLabel("label")
       .linkColor((d) => {
         return data.nodes[d.source].color;
       })
       .linkDirectionalArrowLength((d) => {
-        return (d.value / nodeCount) * 50;
+        return ((nodeCount - d.value) / nodeCount) * 10;
       })
       .linkCurvature(1)
       .linkCurveRotation((d) => {
-        //console.log(d.label);
         return map.get(d.label);
       })
       .linkDirectionalArrowRelPos(1)
       .linkWidth((d) => {
-        return (d.value / nodeCount) * 15;
+        return ((nodeCount - d.value) / nodeCount) * 5;
       });
     setGraph3D(graph);
     setGraphdata(graph.graphData());

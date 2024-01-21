@@ -23,24 +23,25 @@ import scipy.stats
 def load_json(request, edge):
     top_edge_count = edge
     ####################### Set the name of the sample you want to visualize #####################################
-    current_directory = './data/files/'
-    data_name = 'PDAC_64630'
+    current_directory = './data/3D_files/'
+    data_name = 'animal_id1'
     
     ######################## read data in csv format ########################################
-    gene_ids = pd.read_csv(current_directory+'gene_ids_'+data_name+'.csv', header=None)
-    gene_ids = list(gene_ids[0]) # first column is the gene ids. Convert it to list format for conveniance
+    # gene_ids = pd.read_csv(current_directory+'gene_ids_'+data_name+'.csv', header=None)
+    # gene_ids = list(gene_ids[0]) # first column is the gene ids. Convert it to list format for conveniance
     
     cell_barcode = pd.read_csv(current_directory+'cell_barcode_'+data_name+'.csv', header=None)
     cell_barcode = list(cell_barcode[0]) # first column is: cell barcode. Convert it to list format for conveniance
     
     temp = pd.read_csv(current_directory+'coordinates_'+data_name+'.csv', header=None)
-    coordinates = np.zeros((len(cell_barcode), 2)) # num_cells x coordinate
+    coordinates = np.zeros((len(cell_barcode), 3)) # num_cells x coordinate
     for i in range (0, len(temp)):
         coordinates[i,0] = temp[0][i] # x
         coordinates[i,1] = temp[1][i] # y
+        coordinates[i,2] = temp[2][i] # z
     
-    with gzip.open(current_directory+'self_loop_record_'+data_name+'.gz', 'rb') as fp:  #b, a:[0:5]   _filtered
-        self_loop_found = pickle.load(fp)
+    # with gzip.open(current_directory+'self_loop_record_'+data_name+'.gz', 'rb') as fp:  #b, a:[0:5]   _filtered
+    #     self_loop_found = pickle.load(fp)
     ##################### make cell metadata: barcode_info ###################################
     i=0
     barcode_serial = dict()
@@ -51,7 +52,7 @@ def load_json(request, edge):
     i=0
     barcode_info=[]
     for cell_code in cell_barcode:
-        barcode_info.append([cell_code, coordinates[i,0],coordinates[i,1], 0]) # last entry will hold the component number later
+        barcode_info.append([cell_code, coordinates[i,0],coordinates[i,1], coordinates[i,2], 0]) # last entry will hold the component number later
         i=i+1
     
     ####### load annotations ##############################################
@@ -116,17 +117,17 @@ def load_json(request, edge):
     
     for i in range (0, len(barcode_info)):
         if count_points_component[labels[i]] > 1:
-            barcode_info[i][3] = index_dict[labels[i]] #2
-        elif connecting_edges[i][i] == 1 and (i in self_loop_found and i in self_loop_found[i]): # that is: self_loop_found[i][i] do exist 
-            barcode_info[i][3] = 1
+            barcode_info[i][4] = index_dict[labels[i]] #2
+        elif connecting_edges[i][i] == 1:
+             barcode_info[i][4] = 1
         else: 
-            barcode_info[i][3] = 0
+            barcode_info[i][4] = 0
     
     # update the label based on found component numbers
     #max opacity
     for record in range (1, len(csv_record_final)-1):
         i = csv_record_final[record][6]
-        label = barcode_info[i][3]
+        label = barcode_info[i][4]
         csv_record_final[record][5] = label
     
     component_list = dict()
@@ -135,8 +136,8 @@ def load_json(request, edge):
         i = record[6]
         j = record[7]
         component_label = record[5]
-        barcode_info[i][3] = component_label 
-        barcode_info[j][3] = component_label
+        barcode_info[i][4] = component_label 
+        barcode_info[j][4] = component_label
         component_list[component_label] = ''
     
     component_list[0] = ''
@@ -152,42 +153,38 @@ def load_json(request, edge):
     x_min = 2**32-1
     y_index=[]
     y_min = 2**32-1
+    z_index=[]
+    z_min = 2**32-1
     colors_point = []
     for i in range (0, len(barcode_info)):    
         ids.append(i)
         x_index.append(barcode_info[i][1])
         y_index.append(barcode_info[i][2])
+        z_index.append(barcode_info[i][3])
         x_min = min(x_index[i], x_min)
         y_min = min(y_index[i], y_min)
-        colors_point.append(colors[barcode_info[i][3]]) 
-    max_x = np.max(x_index)
-    max_y = np.max(y_index)
+        z_min = min(z_index[i], z_min)
+        colors_point.append(colors[barcode_info[i][4]])
     
     
-    barcode_type=dict()
+    annotation_dict = dict()
     for i in range (1, len(pathologist_label)):
-        if 'tumor'in pathologist_label[i][1]: #'Tumour':
-            barcode_type[pathologist_label[i][0]] = 0
+        if pathologist_label[i][1] in annotation_dict:
+            barcode_type[pathologist_label[i][0]] = annotation_dict[pathologist_label[i][1]]
         else:
-            barcode_type[pathologist_label[i][0]] = 1
-    
+            annotation_dict[pathologist_label[i][1]] = len(annotation_dict)
+            barcode_type[pathologist_label[i][0]] = annotation_dict[pathologist_label[i][1]]
+    print(annotation_dict)
+
     import json
     nodes = []
     for i in range(0, len(barcode_info)):
-        label_str =  str(i)+'_c:'+str(barcode_info[i][3])+'_' # label of the node or spot is consists of: spot id, component number, type of the spot 
-        if barcode_type[barcode_info[i][0]] == 0: #stroma
-            label_str = label_str + 'stroma'
-        elif barcode_type[barcode_info[i][0]] == 1: #tumor
-            label_str = label_str + 'tumor'
-        else:
-            label_str = label_str + 'acinar_reactive'
+        label_str =  str(i)+'_c:'+str(barcode_info[i][4])+'_type'+str(barcode_type[barcode_info[i][0]])
         t = {
             "id": ids[i],
-            # "fx": (x_index[i] - x_min + 100) / 12,
-            # "fy": (y_index[i] - y_min + 100) / 12,
-            "fx": (x_index[i] - x_min) / 5 - 1000,
-            "fy": (y_index[i] - y_min) / 5 - 800,
-            "fz": 0,
+            "fx": x_index[i],
+            "fy": y_index[i],
+            "fz": z_index[i],
             "color": matplotlib.colors.rgb2hex(colors_point[i]),
             "shape": barcode_type[barcode_info[i][0]],
             "label": label_str

@@ -7,6 +7,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="//unpkg.com/3d-force-graph"></script>
     <script src="//unpkg.com/three"></script>
+    <script
+      scr="https://unpkg.com/three/examples/jsm/renderers/CSS2DRenderer.js"
+    ></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="d3-vis.css" />
   </head>
@@ -109,7 +112,7 @@
             .style("border-style", "solid")
         );
         setElement3D(document.getElementById("graph-3d"));
-        callBackend(0);
+        callBackend(1300);
       };
       fuzzySearch;
 
