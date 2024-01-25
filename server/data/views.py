@@ -190,6 +190,7 @@ def load_json(request, edge):
             "fz": 0,
             "color": matplotlib.colors.rgb2hex(colors_point[i]),
             "shape": barcode_type[barcode_info[i][0]],
+            "component":barcode_info[i][3],
             "label": label_str
         }
         nodes.append(t)

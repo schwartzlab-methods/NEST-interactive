@@ -1,4 +1,4 @@
-import { data, setData } from "../globalvars.js";
+import { data, setLastFilter } from "../globalvars.js";
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 import { load3D } from "./3d.js";
 export function loadHistogram(filter) {
@@ -46,10 +46,11 @@ export function loadHistogram(filter) {
   let color_set = new Set();
   for (let i in dataCpy.links) {
     comp_set.add(dataCpy.links[i]["component"]);
-
-    color_set.add(
-      dataCpy.nodes.find((x) => x.id === dataCpy.links[i]["source"]).color
-    );
+    if (dataCpy.links[i]["source"]["color"] != null)
+      color_set.add(dataCpy.links[i]["source"]["color"]);
+    else color_set.add(dataCpy.nodes[dataCpy.links[i]["source"]]["color"]);
+  }
+  for (let i in dataCpy.nodes) {
   }
   var subgroups = Array.from(comp_set);
   var colors = Array.from(color_set);
@@ -152,14 +153,11 @@ export function loadHistogram(filter) {
     })
     .attr("width", x.bandwidth())
     .on("click", function (d) {
-      load3D(d.target.__data__.data["ligand-receptor"]);
+      setLastFilter(d.target.__data__.data["ligand-receptor"]);
+      load3D({
+        type: "nodeSel",
+        data: d.target.__data__.data["ligand-receptor"],
+      });
+      loadHistogram(d.target.__data__.data["ligand-receptor"]);
     });
-
-  let brush = d3.brush().on("start brush", handleBrush);
-  let brushExtent;
-  function handleBrush(e) {
-    brushExtent = e.selection;
-    console.log(e.selection);
-  }
-  svg.call(brush);
 }

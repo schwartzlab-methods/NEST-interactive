@@ -1,5 +1,5 @@
 import { loadNetwork } from "./network.js";
-import { data } from "../globalvars.js";
+import { data, setLastFilter } from "../globalvars.js";
 import Fuse from "https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.esm.js";
 import { load3D } from "./3d.js";
 import { loadHistogram } from "./histogram.js";
@@ -24,7 +24,8 @@ export var fuzzySearch = document
       b.classList.add("text-base", "p-3", "result-child");
       b.innerHTML = result[i].item;
       b.addEventListener("click", function () {
-        load3D(b.innerHTML);
+        setLastFilter(b.innerHTML);
+        load3D({ type: "nodeSel", data: b.innerHTML });
         loadHistogram(b.innerHTML);
         //loadNetwork(b.innerHTML);
       });
