@@ -46,11 +46,7 @@ export function loadHistogram(filter) {
   let color_set = new Set();
   for (let i in dataCpy.links) {
     comp_set.add(dataCpy.links[i]["component"]);
-    if (dataCpy.links[i]["source"]["color"] != null)
-      color_set.add(dataCpy.links[i]["source"]["color"]);
-    else color_set.add(dataCpy.nodes[dataCpy.links[i]["source"]]["color"]);
-  }
-  for (let i in dataCpy.nodes) {
+    color_set.add(dataCpy.links[i]["color"]);
   }
   var subgroups = Array.from(comp_set);
   var colors = Array.from(color_set);

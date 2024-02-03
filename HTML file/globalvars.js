@@ -6,6 +6,7 @@ export var curGraphData;
 export var graphData;
 export var element3D;
 export var lastFilter;
+export var colourType;
 export function setSvg(val) {
   svg = val;
 }
@@ -29,4 +30,7 @@ export function setElement3D(val) {
 }
 export function setLastFilter(val) {
   lastFilter = val;
+}
+export function setColourType(val) {
+  colourType = val;
 }

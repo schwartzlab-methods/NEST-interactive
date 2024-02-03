@@ -9,6 +9,9 @@ export async function callBackend(nodeC) {
     success: (data) => {
       setNodeCount(nodeC);
       setData(data);
+      for (let i in data.links) {
+        data.links[i]["color"] = data.nodes[data.links[i]["source"]]["color"];
+      }
       loadHistogram("NULL");
       load3D("NULL");
       //loadNetwork("NULL");

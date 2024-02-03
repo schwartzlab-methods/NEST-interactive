@@ -6,10 +6,8 @@
     <title>D3 Vis</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="//unpkg.com/3d-force-graph"></script>
-    <script src="//unpkg.com/three"></script>
-    <script
-      scr="https://unpkg.com/three/examples/jsm/renderers/CSS2DRenderer.js"
-    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.1/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="d3-vis.css" />
   </head>
@@ -17,16 +15,40 @@
     <div class="ml-4 my-8 w-11/12">
       <h1 class="text-3xl py-5">NEST Interactive</h1>
       <div>
-        <label for="edge_count" class="text-base font-bold mb-2 py-2"
-          >Edge count:</label
+        <label
+          id="edge_count_label"
+          for="edge_count"
+          class="text-base font-bold mb-2 py-2"
+          >Edge Count: 1300</label
         >
-        <input
-          type="number"
-          id="edge_count"
-          name="edge_count"
-          value="1300"
-          class="shadow appearance-none border rounded py-2 px-3"
-        />
+        <div class="relative mb-6">
+          <label for="labels-range-input" class="sr-only">Edge Count</label>
+          <input
+            id="edge_count"
+            type="range"
+            min="1"
+            class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer bg-gray-200"
+          />
+          <span class="text-sm text-gray-500 absolute start-0 -bottom-6"
+            >Min (1)</span
+          >
+          <span
+            id="edge_count_label_1"
+            class="text-sm text-gray-500 absolute start-1/4 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6"
+          ></span>
+          <span
+            id="edge_count_label_2"
+            class="text-sm text-gray-500 absolute start-2/4 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6"
+          ></span>
+          <span
+            id="edge_count_label_3"
+            class="text-sm text-gray-500 absolute start-3/4 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6"
+          ></span>
+          <span
+            id="edge_count_label_4"
+            class="text-sm text-gray-500 absolute end-0 -bottom-6"
+          ></span>
+        </div>
       </div>
       <div class="pt-3 block">
         <label
@@ -49,8 +71,53 @@
           class="text-base font-bold mb-2 py-2"
           >Change Colour:</label
         >
+        <button
+          id="dropdownButton"
+          data-dropdown-toggle="dropdown"
+          class="bg-blue-200 hover:bg-blue-300 rounded-lg px-5 py-2.5 text-center inline-flex items-center"
+          type="button"
+        >
+          Select Type
+          <svg
+            class="w-2.5 h-2.5 ms-3"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 10 6"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m1 1 4 4 4-4"
+            />
+          </svg>
+        </button>
+        <div
+          id="dropdown"
+          class="z-10 absolute hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-36"
+          style="left: 8.5em"
+        >
+          <ul class="py-2 text-sm" aria-labelledby="dropdownButton">
+            <li>
+              <a class="block px-4 py-2 hover:bg-gray-100 dropdownOptions"
+                >Component</a
+              >
+            </li>
+            <li>
+              <a class="block px-4 py-2 hover:bg-gray-100 dropdownOptions"
+                >Ligand-Receptor</a
+              >
+            </li>
+            <li>
+              <a class="block px-4 py-2 hover:bg-gray-100 dropdownOptions"
+                >Cell Type</a
+              >
+            </li>
+          </ul>
+        </div>
         <input
-          type="number"
           id="component_input"
           name="component_input"
           value=""
@@ -65,10 +132,16 @@
           title="Choose your color"
         />
         <button
-          class="shadow appearance-none border bg-blue-200 rounded py-2 px-3"
+          class="shadow appearance-none border bg-blue-200 hover:bg-blue-300 rounded py-2 px-3"
           id="colour_change_button"
         >
           <p class="w-full text-center">Change</p>
+        </button>
+        <button
+          class="shadow appearance-none border bg-gray-200 hover:bg-gray-300 rounded py-2 px-3"
+          id="colour_generate_button"
+        >
+          <p class="w-full text-center">Generate</p>
         </button>
       </div>
       <div class="mt-3">
@@ -106,7 +179,7 @@
                 class="shadow appearance-none border rounded pl-10 py-2 px-3"
               />
               <button
-                class="shadow appearance-none border bg-blue-200 rounded py-2 px-3"
+                class="shadow appearance-none border bg-blue-200 hover:bg-blue-300 rounded py-2 px-3"
                 id="reset_search"
               >
                 <p class="w-full text-center">Reset</p>
@@ -134,8 +207,29 @@
         setSvg,
         setElement3D,
         setLastFilter,
+        setColourType,
       } from "./globalvars.js";
-      window.onload = function () {
+      window.onload = async function () {
+        await $.ajax({
+          type: "GET",
+          url: "http://127.0.0.1:8000/data/numEdges",
+          success: (data) => {
+            document.getElementById("edge_count").setAttribute("max", data);
+            document.getElementById("edge_count").setAttribute("value", 1300);
+            document.getElementById("edge_count_label_1").innerHTML = parseInt(
+              data / 4
+            );
+            document.getElementById("edge_count_label_2").innerHTML = parseInt(
+              (data * 2) / 4
+            );
+            document.getElementById("edge_count_label_3").innerHTML = parseInt(
+              (data * 3) / 4
+            );
+            document.getElementById("edge_count_label_4").innerHTML =
+              "Max (" + data + ")";
+          },
+        });
+
         const margin = { top: 10, right: 10, bottom: 10, left: 10 };
         const width = 1000 - margin.left - margin.right;
         const height = 700 - margin.top - margin.bottom;
@@ -154,6 +248,8 @@
       fuzzySearch;
 
       document.querySelector("#edge_count").addEventListener("change", (e) => {
+        document.getElementById("edge_count_label").innerHTML =
+          "Edge Count: " + e.target.value;
         callBackend(e.target.value);
       });
 
@@ -164,14 +260,41 @@
         });
 
       document
+        .querySelector("#dropdownButton")
+        .addEventListener("click", () => {
+          let list = document.getElementById("dropdown").classList;
+          if (list.contains("hidden")) list.remove("hidden");
+          else list.add("hidden");
+        });
+
+      let dropdownOptions = document.querySelectorAll(".dropdownOptions");
+      for (let i = 0; i < dropdownOptions.length; i++) {
+        dropdownOptions[i].addEventListener("click", (e) => {
+          document.querySelector("#dropdownButton").innerHTML =
+            e.target.innerHTML;
+          setColourType(e.target.innerHTML);
+          document.getElementById("dropdown").classList.add("hidden");
+        });
+      }
+
+      document
         .querySelector("#colour_change_button")
         .addEventListener("click", (e) => {
           load3D({
-            type: "colour",
+            type: "colour-change",
             data: [
               document.getElementById("component_input").value,
               document.getElementById("colour_picker").value,
             ],
+          });
+        });
+
+      document
+        .querySelector("#colour_generate_button")
+        .addEventListener("click", (e) => {
+          load3D({
+            type: "colour-generate",
+            data: null,
           });
         });
 

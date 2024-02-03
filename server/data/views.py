@@ -20,11 +20,16 @@ import argparse
 from scipy.sparse.csgraph import connected_components
 import scipy.stats
 
+####################### Set the name of the sample you want to visualize #####################################
+current_directory = './data/files/'
+data_name = 'PDAC_64630'
+
+def get_num_edge(request):
+    df = pd.read_csv(current_directory+'NEST_combined_rank_product_output_'+data_name+'_top20percent.csv', sep=",")
+    return HttpResponse(len(df.index))
+
 def load_json(request, edge):
     top_edge_count = edge
-    ####################### Set the name of the sample you want to visualize #####################################
-    current_directory = './data/files/'
-    data_name = 'PDAC_64630'
     
     ######################## read data in csv format ########################################
     gene_ids = pd.read_csv(current_directory+'gene_ids_'+data_name+'.csv', header=None)
@@ -144,7 +149,7 @@ def load_json(request, edge):
     
     ############################  Network Plot ######################
     from data.altairThemes import get_colour_scheme  # assuming you have altairThemes.py at your current directoy or your system knows the path of this altairThemes.py.
-    set1 = get_colour_scheme("Set1", unique_component_count)
+    set1 = get_colour_scheme("Set1", unique_component_count+1)
     colors = set1
     colors[0] = '#000000'
     ids = []
@@ -174,13 +179,7 @@ def load_json(request, edge):
     import json
     nodes = []
     for i in range(0, len(barcode_info)):
-        label_str =  str(i)+'_c:'+str(barcode_info[i][3])+'_' # label of the node or spot is consists of: spot id, component number, type of the spot 
-        if barcode_type[barcode_info[i][0]] == 0: #stroma
-            label_str = label_str + 'stroma'
-        elif barcode_type[barcode_info[i][0]] == 1: #tumor
-            label_str = label_str + 'tumor'
-        else:
-            label_str = label_str + 'acinar_reactive'
+        label_str = barcode_info[i][0]+', C:'+str(barcode_info[i][3]) # label of the node or spot is consists of: spot id, component number, type of the spot 
         t = {
             "id": ids[i],
             # "fx": (x_index[i] - x_min + 100) / 12,
