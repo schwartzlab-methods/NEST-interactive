@@ -61,14 +61,9 @@ export function load3D(filterObj) {
             nodeSet.add(newDataCur.links[i]["target"]["id"]);
           }
         }
-        for (let i = 0; i < newDataCur.nodes.length; i++) {
-          if (nodeSet.has(newDataCur.nodes[i]["id"])) {
-            newDataCur.nodes[i]["color"] = filter[1];
-          }
-        }
         graph3D.graphData(newDataCur);
         setCurGraphData(newDataCur);
-      } else if (colourType == "Cell Type") {
+      } else if (colourType == "Vertex Type") {
         for (let i = 0; i < newDataCur.nodes.length; i++) {
           if (newDataCur.nodes[i]["shape"] == filter[0]) {
             newDataCur.nodes[i]["color"] = filter[1];
@@ -184,7 +179,11 @@ export function load3D(filterObj) {
       )
       .nodeLabel("label")
       .graphData(data)
-      .width(($(window).width() * 11) / 12)
+      .width(
+        $(window).width() < 1024
+          ? ($(window).width() * 11) / 12
+          : ($(window).width() * 6) / 12
+      )
       .height(($(window).height() * 11) / 12)
       .backgroundColor("#F5F5DC")
       .linkOpacity(1)

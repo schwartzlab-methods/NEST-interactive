@@ -27,9 +27,13 @@ export function loadHistogram(filter) {
   }
 
   // set the dimensions and margins of the graph
-  let margin = { top: 10, right: 30, bottom: 100, left: 50 },
-    width = ($(window).width() * 11) / 12 - margin.left - margin.right,
-    height = ($(window).height() * 4) / 6 - margin.top - margin.bottom;
+  let histWidth =
+    $(window).width() < 1024
+      ? ($(window).width() * 11) / 12
+      : ($(window).width() * 9) / 24;
+  let margin = { top: 0, right: 20, bottom: 20, left: 20 },
+    width = histWidth - margin.left - margin.right,
+    height = ($(window).height() * 4) / 12 - margin.top - margin.bottom;
   d3.select("#histogram").selectAll("*").remove();
 
   // append the svg object to the body of the page
@@ -96,16 +100,17 @@ export function loadHistogram(filter) {
   groups = groupsCpy;
 
   // add X axis
-  var x = d3.scaleBand().domain(groups).range([0, width]).padding(0.2);
+  var x = d3.scaleBand().domain(groups).range([0, width]).padding(0.1);
   svg
     .append("g")
     .attr("transform", "translate(0," + height + ")")
     .call(d3.axisBottom(x).tickSizeOuter(0))
     .selectAll("text")
-    .style("text-anchor", "end")
-    .attr("dx", "-.8em")
-    .attr("dy", ".15em")
-    .attr("transform", "rotate(-65)");
+    .attr("text-anchor", "end")
+    .attr("dx", "-2em")
+    .attr("dy", "-1em")
+    .attr("transform", "rotate(-65)")
+    .attr("font-size", "0.3em");
 
   // add Y axis
   var y = d3
@@ -148,6 +153,14 @@ export function loadHistogram(filter) {
       return y(d[0]) - y(d[1]);
     })
     .attr("width", x.bandwidth())
+    .on("mouseover", (d) => {
+      document.getElementById("histogram_hover").innerHTML =
+        d.target.__data__.data["ligand-receptor"];
+      d.target.style.cursor = "pointer";
+    })
+    .on("mouseleave", (d) => {
+      document.getElementById("histogram_hover").innerHTML = "None";
+    })
     .on("click", function (d) {
       setLastFilter(d.target.__data__.data["ligand-receptor"]);
       load3D({
