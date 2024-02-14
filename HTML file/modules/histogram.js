@@ -31,7 +31,7 @@ export function loadHistogram(filter) {
     $(window).width() < 1024
       ? ($(window).width() * 11) / 12
       : ($(window).width() * 9) / 24;
-  let margin = { top: 0, right: 20, bottom: 40, left: 20 },
+  let margin = { top: 0, right: 20, bottom: 40, left: 30 },
     width = histWidth - margin.left - margin.right,
     height = ($(window).height() * 5) / 12 - margin.top - margin.bottom;
   d3.select("#histogram").selectAll("*").remove();
