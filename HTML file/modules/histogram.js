@@ -31,9 +31,9 @@ export function loadHistogram(filter) {
     $(window).width() < 1024
       ? ($(window).width() * 11) / 12
       : ($(window).width() * 9) / 24;
-  let margin = { top: 0, right: 20, bottom: 20, left: 20 },
+  let margin = { top: 0, right: 20, bottom: 40, left: 20 },
     width = histWidth - margin.left - margin.right,
-    height = ($(window).height() * 4) / 12 - margin.top - margin.bottom;
+    height = ($(window).height() * 5) / 12 - margin.top - margin.bottom;
   d3.select("#histogram").selectAll("*").remove();
 
   // append the svg object to the body of the page
@@ -108,7 +108,7 @@ export function loadHistogram(filter) {
     .selectAll("text")
     .attr("text-anchor", "end")
     .attr("dx", "-2em")
-    .attr("dy", "-1em")
+    .attr("dy", "-2em")
     .attr("transform", "rotate(-65)")
     .attr("font-size", "0.3em");
 

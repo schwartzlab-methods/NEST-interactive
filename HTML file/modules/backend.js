@@ -1,4 +1,3 @@
-import { loadNetwork } from "./network.js";
 import { loadHistogram } from "./histogram.js";
 import { load3D } from "./3d.js";
 import { svg, setSvg, data, setData, setNodeCount } from "../globalvars.js";

@@ -1,4 +1,3 @@
-import { loadNetwork } from "./network.js";
 import { data, setLastFilter } from "../globalvars.js";
 import Fuse from "https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.esm.js";
 import { load3D } from "./3d.js";
