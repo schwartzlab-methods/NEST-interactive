@@ -1,4 +1,4 @@
-# Schwartz-Lab-Vis
+# NEST-Interactive
 
 ## Instructions:
 ### Frontend:
