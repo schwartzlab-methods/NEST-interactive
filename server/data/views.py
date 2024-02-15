@@ -163,7 +163,7 @@ def load_json(request, edge):
     from data.altairThemes import get_colour_scheme  # assuming you have altairThemes.py at your current directoy or your system knows the path of this altairThemes.py.
     set1 = get_colour_scheme("Set1", unique_component_count+1)
     colors = set1
-    colors[0] = '#000000'
+    colors[0] = '#dddddd'
     ids = []
     x_index=[]
     x_min = 2**32-1

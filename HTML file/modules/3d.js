@@ -178,13 +178,13 @@ export function load3D(filterObj) {
       .linkOpacity(1)
       .linkLabel("label")
       .linkDirectionalArrowLength((d) => {
-        return ((nodeCount - d.value) / nodeCount) * 10;
+        return ((nodeCount - d.value) / nodeCount) * 30;
       })
+      .linkDirectionalArrowRelPos(1)
       .linkCurvature(1)
       .linkCurveRotation((d) => {
         return map.get(d.label);
       })
-      .linkDirectionalArrowRelPos(1)
       .linkWidth((d) => {
         return ((nodeCount - d.value) / nodeCount) * 5;
       });
