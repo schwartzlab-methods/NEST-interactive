@@ -4,9 +4,9 @@
 ### Frontend:
 1. If VSCode is installed, adding the "Live Server" extension from Ritwick Dey makes spinning up a server easy. Access the server hosted at http://127.0.0.1:5500/HTML%20file/NEST-vis.html
 2. Otherwise
-   - run `python -m http.server` from the root directory
-   - open http://localhost:8000 and navigate to "HTML file" then "NEST-vis.html"
-   - Server should be hosted at http://localhost:8000/HTML%20file/NEST-vis.html
+   - run `python -m http.server 80` from the root directory
+   - open http://localhost and navigate to "HTML file" then "NEST-vis.html"
+   - Server should be hosted at http://localhost/HTML%20file/NEST-vis.html
 
 ### Backend: 
 - Navigate into the "server" directory
