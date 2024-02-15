@@ -9,6 +9,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.1/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      type="text/css"
+    />
     <link rel="stylesheet" href="d3-vis.css" />
   </head>
   <body>
@@ -210,6 +215,24 @@
           <span id="histogram_hover">None</span>
         </div>
         <div id="histogram" class="mt-5"></div>
+        <div class="static">
+          <i
+            class="fa-solid fa-bars fixed top-6 right-6"
+            style="z-index: 1"
+            id="legend_button"
+          ></i>
+          <div
+            id="legend-wrapper"
+            class="fixed hidden top-3 right-3 p-3 border bg-white"
+          >
+            <h3>Legend</h3>
+            <ul
+              id="legend"
+              class="mt-5 max-h-60 pr-2"
+              style="overflow-y: auto"
+            ></ul>
+          </div>
+        </div>
       </div>
     </div>
     <script type="module">
@@ -222,8 +245,15 @@
         setSvg,
         setElement3D,
         setLastFilter,
+        colourType,
         setColourType,
+        ThreeDObjs,
       } from "./globalvars.js";
+      let meshes = [],
+        scenes = [],
+        cameras = [],
+        renderers = [];
+
       window.onload = async function () {
         await $.ajax({
           type: "GET",
@@ -241,6 +271,46 @@
               (data * 3) / 4
             );
             document.getElementById("edge_count_label_4").innerHTML = data;
+          },
+        });
+
+        await $.ajax({
+          type: "GET",
+          url: "http://127.0.0.1:8000/data/vertextTypes/",
+          success: (data) => {
+            for (let vertex_type in data) {
+              const scene = new THREE.Scene();
+              scene.background = new THREE.Color("white");
+              const geometry = ThreeDObjs[data[vertex_type] % 10];
+              geometry.center();
+              const material = new THREE.MeshNormalMaterial({
+                side: THREE.DoubleSide,
+              });
+              const mesh = new THREE.Mesh(geometry, material);
+              scene.add(mesh);
+              const camera = new THREE.PerspectiveCamera();
+              camera.position.set(24, 24, 24);
+              camera.lookAt(0, 0, 0);
+              const renderer = new THREE.WebGLRenderer({ antialias: true });
+
+              var text = document.createElement("p");
+              if (vertex_type == "") text.innerHTML = "[empty]";
+              else text.innerHTML = vertex_type;
+              text.style["display"] = "inline";
+              var obj = renderer.domElement;
+              obj.style["display"] = "inline";
+              var li = document.createElement("li");
+              li.appendChild(obj);
+              li.appendChild(text);
+              document.querySelector("#legend").appendChild(li);
+              renderer.setSize(50, 50);
+              renderer.render(scene, camera);
+
+              meshes.push(mesh);
+              scenes.push(scene);
+              cameras.push(camera);
+              renderers.push(renderer);
+            }
           },
         });
 
@@ -301,6 +371,14 @@
               document.getElementById("colour_picker").value,
             ],
           });
+          console.log(colourType);
+          if (colourType == "Vertex Type") {
+            let index = document.getElementById("component_input").value;
+            meshes[index].material = new THREE.MeshBasicMaterial({
+              color: document.getElementById("colour_picker").value,
+            });
+            renderers[index].render(scenes[index], cameras[index]);
+          }
         });
 
       document
@@ -317,6 +395,12 @@
         document.querySelector("#gene_or_connection_results").innerHTML = "";
         callBackend(document.querySelector("#edge_count").value);
         setLastFilter(undefined);
+        for (let index = 0; index < meshes.length; index++) {
+          meshes[index].material = new THREE.MeshNormalMaterial({
+            side: THREE.DoubleSide,
+          });
+          renderers[index].render(scenes[index], cameras[index]);
+        }
       });
 
       document
@@ -336,6 +420,17 @@
           }
         }
       };
+
+      document
+        .getElementById("legend_button")
+        .addEventListener("click", (e) => {
+          var results = document.getElementById("legend-wrapper");
+          if (results.classList.contains("hidden")) {
+            results.classList.remove("hidden");
+          } else {
+            results.classList.add("hidden");
+          }
+        });
     </script>
   </body>
 </html>

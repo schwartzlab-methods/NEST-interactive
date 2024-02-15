@@ -22,3 +22,7 @@ input[type=text]::-webkit-search-cancel-button {
 #gene_or_connection_results:hover {
   cursor: pointer;
 }
+
+#legend_button:hover {
+  cursor: pointer;
+}
