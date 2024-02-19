@@ -4,15 +4,9 @@ import csv
 import json
 from pathlib import Path
 import pickle
-from scipy import sparse
-import scanpy as sc
-import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.colors import LinearSegmentedColormap, to_hex, rgb2hex
 import matplotlib
-import qnorm
 from scipy.sparse import csr_matrix
-from collections import defaultdict
 import pandas as pd
 import gzip
 from scipy.sparse.csgraph import connected_components
@@ -35,8 +29,11 @@ def get_vertex_types(request):
     
     annotation_dict = dict()
     for i in range (1, len(pathologist_label)):
-        if pathologist_label[i][1] not in annotation_dict:
+        if (pathologist_label[i][1] == "") and ("[empty]" not in annotation_dict):
+            annotation_dict["[empty]"] = len(annotation_dict)
+        elif (pathologist_label[i][1] != "") and pathologist_label[i][1] not in annotation_dict:
             annotation_dict[pathologist_label[i][1]] = len(annotation_dict)
+    print(annotation_dict)
     return HttpResponse(json.dumps(annotation_dict), content_type='application/json')
 
 def load_json(request, edge):
@@ -189,7 +186,7 @@ def load_json(request, edge):
         else:
             annotation_dict[pathologist_label[i][1]] = len(annotation_dict)
             barcode_type[pathologist_label[i][0]] = annotation_dict[pathologist_label[i][1]]
-    print(annotation_dict)
+    #print(annotation_dict)
     
     nodes = []
     for i in range(0, len(barcode_info)):

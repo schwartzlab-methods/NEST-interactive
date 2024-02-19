@@ -23,7 +23,7 @@
         id="graph-3d"
         class="border-solid border-2 border-gray-200 lg:float-left"
       ></div>
-      <div class="lg:float-right">
+      <div class="lg:float-right max-w-100">
         <div>
           <label
             id="edge_count_label"
@@ -129,17 +129,25 @@
                 </ul>
               </div>
             </div>
-            <input
-              id="component_input"
-              name="component_input"
-              value=""
-              class="shadow appearance-none border rounded py-2 px-3"
-            />
+            <div class="relative inline-block">
+              <input
+                id="colour_type_input"
+                name="colour_type_input"
+                value=""
+                placeholder="Select a type"
+                class="shadow appearance-none border rounded py-2 px-3"
+              />
+              <div
+                id="colour_type_results"
+                class="absolute w-60 overflow-auto max-h-40 bg-white divide-y divide-black-100 rounded-lg shadow results"
+                style="z-index: 1"
+              ></div>
+            </div>
             <input
               type="color"
               id="colour_picker"
               name="colour_picker"
-              class="p-1 h-10 w-14 bg-white align-middle border border-gray-200 cursor-pointer w-10 rounded-lg"
+              class="p-1 h-10 inline w-14 bg-white align-middle border border-gray-200 cursor-pointer w-10 rounded-lg"
               value="#f4f5de"
               title="Choose your color"
             />
@@ -191,6 +199,7 @@
                   type="text"
                   id="gene_or_connection"
                   name="gene_or_connection"
+                  placeholder="Start typing..."
                   class="shadow appearance-none border rounded pl-10 py-2 px-3"
                 />
                 <button
@@ -239,7 +248,10 @@
       import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
       import { callBackend } from "./modules/backend.js";
       import { load3D } from "./modules/3d.js";
-      import { fuzzySearch } from "./modules/fuzzysearch.js";
+      import {
+        fuzzySearchGeneOrConnection,
+        fuzzySearchColourType,
+      } from "./modules/fuzzysearch.js";
       import {
         graph3D,
         setSvg,
@@ -248,6 +260,9 @@
         colourType,
         setColourType,
         ThreeDObjs,
+        componentCnt,
+        vertexTypes,
+        setVertexTypes,
       } from "./globalvars.js";
       let meshes = [],
         scenes = [],
@@ -278,6 +293,7 @@
           type: "GET",
           url: "http://127.0.0.1:8000/data/vertextTypes/",
           success: (data) => {
+            setVertexTypes(data);
             for (let vertex_type in data) {
               const scene = new THREE.Scene();
               scene.background = new THREE.Color("white");
@@ -294,8 +310,7 @@
               const renderer = new THREE.WebGLRenderer({ antialias: true });
 
               var text = document.createElement("p");
-              if (vertex_type == "") text.innerHTML = "[empty]";
-              else text.innerHTML = vertex_type;
+              text.innerHTML = vertex_type;
               text.style["display"] = "inline";
               var obj = renderer.domElement;
               obj.style["display"] = "inline";
@@ -329,12 +344,24 @@
         callBackend(1300);
         setLastFilter(undefined);
       };
-      fuzzySearch;
+      fuzzySearchGeneOrConnection;
+      fuzzySearchColourType;
 
       document.querySelector("#edge_count").addEventListener("change", (e) => {
+        document.querySelector("#dropdownButton").innerHTML = "Select Type";
+        document.querySelector("#colour_type_input").placeholder = "";
+        document.querySelector("#colour_type_input").value = "";
+        document.querySelector("#colour_type_input").removeAttribute("type");
         document.getElementById("edge_count_label").innerHTML =
           "Edge Count: " + e.target.value;
         callBackend(e.target.value);
+
+        for (let index = 0; index < meshes.length; index++) {
+          meshes[index].material = new THREE.MeshNormalMaterial({
+            side: THREE.DoubleSide,
+          });
+          renderers[index].render(scenes[index], cameras[index]);
+        }
       });
 
       document
@@ -358,6 +385,15 @@
             e.target.innerHTML;
           setColourType(e.target.innerHTML);
           document.getElementById("dropdown").classList.add("hidden");
+
+          let colour_element = document.getElementById("colour_type_input");
+          if (colourType == "Component") {
+            colour_element.type = "number";
+            colour_element.placeholder = "Enter # from 0 - " + componentCnt;
+          } else {
+            colour_element.removeAttribute("type");
+            colour_element.placeholder = "Start typing...";
+          }
         });
       }
 
@@ -367,13 +403,16 @@
           load3D({
             type: "colour-change",
             data: [
-              document.getElementById("component_input").value,
+              document.getElementById("colour_type_input").value,
               document.getElementById("colour_picker").value,
             ],
           });
           console.log(colourType);
           if (colourType == "Vertex Type") {
-            let index = document.getElementById("component_input").value;
+            let index =
+              vertexTypes[document.getElementById("colour_type_input").value];
+            console.log(meshes);
+            console.log(vertexTypes);
             meshes[index].material = new THREE.MeshBasicMaterial({
               color: document.getElementById("colour_picker").value,
             });
@@ -412,9 +451,24 @@
           }
         });
 
+      document
+        .getElementById("colour_type_input")
+        .addEventListener("click", (e) => {
+          var results = document.getElementById("colour_type_results");
+          if (!results.classList.contains("show")) {
+            results.classList.add("show");
+          }
+        });
+
       window.onclick = function (event) {
         if (!(event.target.id == "gene_or_connection")) {
           var results = document.getElementById("gene_or_connection_results");
+          if (results.classList.contains("show")) {
+            results.classList.remove("show");
+          }
+        }
+        if (!(event.target.id == "colour_type_input")) {
+          var results = document.getElementById("colour_type_results");
           if (results.classList.contains("show")) {
             results.classList.remove("show");
           }

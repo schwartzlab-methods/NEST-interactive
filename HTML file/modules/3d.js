@@ -11,6 +11,9 @@ import {
   lastFilter,
   colourType,
   ThreeDObjs,
+  componentCnt,
+  setComponentCnt,
+  vertexTypes,
 } from "../globalvars.js";
 import { loadHistogram } from "./histogram.js";
 
@@ -66,12 +69,12 @@ export function load3D(filterObj) {
         setCurGraphData(newDataCur);
       } else if (colourType == "Vertex Type") {
         for (let i = 0; i < newDataCur.nodes.length; i++) {
-          if (newDataCur.nodes[i]["shape"] == filter[0]) {
+          if (newDataCur.nodes[i]["shape"] == vertexTypes[filter[0]]) {
             newDataCur.nodes[i]["color"] = filter[1];
           }
         }
         for (let i = 0; i < graphData.nodes.length; i++) {
-          if (graphData.nodes[i]["shape"] == filter[0]) {
+          if (graphData.nodes[i]["shape"] == vertexTypes[filter[0]]) {
             graphData.nodes[i]["color"] = filter[1];
           }
         }
@@ -156,6 +159,12 @@ export function load3D(filterObj) {
     for (let i in data.links) {
       map.set(data.links[i].label, Math.random() * Math.PI * 2);
     }
+    setComponentCnt(data.nodes[0].component);
+    for (let i in data.nodes) {
+      if (data.nodes[i].component > componentCnt) {
+        setComponentCnt(data.nodes[i].component);
+      }
+    }
     let graph = ForceGraph3D()(element3D)
       .nodeThreeObject(
         ({ shape, color }) =>
@@ -169,11 +178,9 @@ export function load3D(filterObj) {
       .nodeLabel("label")
       .graphData(data)
       .width(
-        $(window).width() < 1024
-          ? ($(window).width() * 11) / 12
-          : ($(window).width() * 6) / 12
+        screen.width < 1024 ? (screen.width * 11) / 12 : (screen.width * 6) / 12
       )
-      .height(($(window).height() * 11) / 12)
+      .height((screen.height * 11) / 12)
       .backgroundColor("#F5F5DC")
       .linkOpacity(1)
       .linkLabel("label")

@@ -7,6 +7,8 @@ export var graphData;
 export var element3D;
 export var lastFilter;
 export var colourType;
+export var componentCnt;
+export var vertexTypes;
 export function setSvg(val) {
   svg = val;
 }
@@ -33,6 +35,12 @@ export function setLastFilter(val) {
 }
 export function setColourType(val) {
   colourType = val;
+}
+export function setComponentCnt(val) {
+  componentCnt = val;
+}
+export function setVertexTypes(val) {
+  vertexTypes = val;
 }
 export var ThreeDObjs = [
   new THREE.SphereGeometry(8),

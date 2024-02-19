@@ -28,12 +28,10 @@ export function loadHistogram(filter) {
 
   // set the dimensions and margins of the graph
   let histWidth =
-    $(window).width() < 1024
-      ? ($(window).width() * 11) / 12
-      : ($(window).width() * 9) / 24;
+    screen.width < 1024 ? (screen.width * 11) / 12 : (screen.width * 9) / 24;
   let margin = { top: 0, right: 20, bottom: 40, left: 30 },
     width = histWidth - margin.left - margin.right,
-    height = ($(window).height() * 5) / 12 - margin.top - margin.bottom;
+    height = (screen.height * 5) / 12 - margin.top - margin.bottom;
   d3.select("#histogram").selectAll("*").remove();
 
   // append the svg object to the body of the page

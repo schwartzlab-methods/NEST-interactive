@@ -26,3 +26,9 @@ input[type=text]::-webkit-search-cancel-button {
 #legend_button:hover {
   cursor: pointer;
 }
+
+@media only screen and (min-width: 1024px) {
+  .max-w-100 {
+    max-width: 44%;
+  }
+}
