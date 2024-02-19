@@ -1,4 +1,4 @@
-# Schwartz-Lab-Vis
+# NEST-Interactive
 
 ## Instructions:
 ### Frontend:
@@ -14,5 +14,6 @@
 - Run `pipenv shell` then `pipenv install`
   - The required packages are
 
-    ![image](https://github.com/schwartzlab-methods/nest-interactive/assets/43073270/65e3d49c-042d-41bb-8418-a7f57edf9fa6)
+    ![image](https://github.com/schwartzlab-methods/nest-interactive/assets/43073270/f0d8a619-6470-4662-8819-7be1becfdb04)
+
 - Run `python .\manage.py runserver`
