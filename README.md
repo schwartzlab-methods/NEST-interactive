@@ -20,7 +20,7 @@
 
     ![image](https://github.com/schwartzlab-methods/nest-interactive/assets/43073270/f0d8a619-6470-4662-8819-7be1becfdb04)
 
-- Set environment variables (Examples use Windows Powershell):
+- Set environment variables (examples use Windows Powershell):
   1. The directory relative to root in which your input files are saved, e.g. `$env:DIRECTORY="./data/files/"`
   2. The common name that identifies input files, e.g. `$env:FILENAME="PDAC_64630"`
 - Run `python .\manage.py runserver`
