@@ -9,14 +9,16 @@ import matplotlib
 from scipy.sparse import csr_matrix
 import pandas as pd
 import gzip
-import os
 from scipy.sparse.csgraph import connected_components
 
 ####################### Set the name of the sample you want to visualize #####################################
-current_directory = os.environ.get('DIRECTORY') # ./data/files/, ./data/3D_files/
-data_name = os.environ.get('FILENAME') # PDAC_64630, animal_id1
+with open(".env", "r") as f:
+    current_directory = f.readline().split("=")[1].removesuffix("\n") # ./data/files/, ./data/3D_files/
+    data_name = f.readline().split("=")[1] # PDAC_64630, animal_id1
 
 def get_num_edge(request):
+    print(current_directory)
+    print(data_name)
     df = pd.read_csv(current_directory+'NEST_combined_rank_product_output_'+data_name+'_top20percent.csv', sep=",")
     return HttpResponse(len(df.index))
 
