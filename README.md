@@ -20,5 +20,5 @@
 
     ![image](https://github.com/schwartzlab-methods/nest-interactive/assets/43073270/f0d8a619-6470-4662-8819-7be1becfdb04)
 
-- To use your own input files, upload them in a directory under server/data. Note that the name of this directory is referred to as *DIRECTORY_NAME* and the common identifier across file names is referred to as *FILE_IDENTIFIER* (e.g. cell_barcode_**PDAC_64630**). For custom data, run `python .\manage.py setdata DIRECTORY_NAME FILE_IDENTIFIER`; otherwise, the default is equivalent to `python .\manage.py setdata ./data/files/ PDAC_64630`
+- To use your own input files, upload them in a directory under server/data. Note that the name of this directory is referred to as *DIRECTORY_NAME* and the common identifier across file names is referred to as *FILE_IDENTIFIER* (e.g. cell_barcode_**PDAC_64630**). For custom data, run `python .\manage.py setdata DIRECTORY_NAME FILE_IDENTIFIER`. To return to default, run `python .\manage.py setdata ./data/files/ PDAC_64630`
 - Run `python .\manage.py runserver`
