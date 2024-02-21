@@ -17,8 +17,6 @@ with open(".env", "r") as f:
     data_name = f.readline().split("=")[1] # PDAC_64630, animal_id1
 
 def get_num_edge(request):
-    print(current_directory)
-    print(data_name)
     df = pd.read_csv(current_directory+'NEST_combined_rank_product_output_'+data_name+'_top20percent.csv', sep=",")
     return HttpResponse(len(df.index))
 
