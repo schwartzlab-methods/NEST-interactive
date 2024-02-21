@@ -29,7 +29,7 @@ export function loadHistogram(filter) {
   // set the dimensions and margins of the graph
   let histWidth =
     screen.width < 1024 ? (screen.width * 11) / 12 : (screen.width * 9) / 24;
-  let margin = { top: 0, right: 20, bottom: 40, left: 20 },
+  let margin = { top: 0, right: 20, bottom: 40, left: 30 },
     width = histWidth - margin.left - margin.right,
     height = (screen.height * 5) / 12 - margin.top - margin.bottom;
   d3.select("#histogram").selectAll("*").remove();
