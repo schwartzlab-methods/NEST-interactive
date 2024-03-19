@@ -1,4 +1,4 @@
-# NEST-Interactive
+# ![alt text](https://github.com/schwartzlab-methods/nest-interactive/blob/main/nest_logo.svg) NEST-Interactive
 
 ## Instructions:
 
