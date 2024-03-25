@@ -1,6 +1,14 @@
 # ![alt text](https://github.com/schwartzlab-methods/nest-interactive/blob/main/nest_logo.svg) NEST-Interactive
 
 ## Instructions:
+Navigate into the pulled nest_interactive directory. Please run the following command with three arguments:
+1. Desired port to run the frontend, e.g., 8080
+2. Path to the directory having NEST output and required metadata files, e.g., barcode, coordinates, etc.
+3. Name of the data that you want to visualize on the interactive nest, e.g., PDAC_64630 or V1_Human_Lymph_Node_spatial (the --data_name argument that is used during running the NEST model).
+
+````
+bash nest_interactive 8080 server/data/files_V1_Human_Lymph_Node_spatial/ V1_Human_Lymph_Node_spatial
+````
 
 ### Frontend:
 
