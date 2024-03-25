@@ -52,9 +52,9 @@ def load_json(request, edge):
         coordinates[i,2] = temp[2][i] # z
     
     self_loop_found = []
-    self_loop_path = Path(current_directory+data_name+'self_loop_record'+'.gz')
+    self_loop_path = Path(current_directory+data_name+'_self_loop_record'+'.gz')
     if self_loop_path.is_file():
-        with gzip.open(current_directory+data_name+'self_loop_record'+'.gz', 'rb') as fp:
+        with gzip.open(current_directory+data_name+'_self_loop_record'+'.gz', 'rb') as fp:
             self_loop_found = pickle.load(fp)
     ##################### make cell metadata: barcode_info ###################################
     i=0
