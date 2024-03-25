@@ -7,7 +7,7 @@ Navigate into the pulled nest_interactive directory. Please run the following co
 3. Name of the data that you want to visualize on the interactive nest, e.g., PDAC_64630 or V1_Human_Lymph_Node_spatial (the --data_name argument that is used during running the NEST model).
 
 ````
-bash nest_interactive 8080 server/data/files_V1_Human_Lymph_Node_spatial/ V1_Human_Lymph_Node_spatial
+bash nest_interactive 8080 server/data/files/ PDAC_64630
 ````
 
 ### Frontend:
