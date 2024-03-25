@@ -1,5 +1,5 @@
 # ![alt text](https://github.com/schwartzlab-methods/nest-interactive/blob/main/nest_logo.svg) NEST-Interactive
-## The required python packages are:
+## Used python packages:
   ```
   django
   numpy
