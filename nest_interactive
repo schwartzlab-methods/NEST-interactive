@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+
+# running the server
+cd server
+echo "Starting backend. See the logs in run_server.log"
+python ./manage.py setdata $2 $3 
+nohup python ./manage.py runserver > ../run_server.log  2>&1 &
+kill_id_1=$!
+
+# running the frontend
+cd ..
+echo "Starting frontend. See the logs in run_front.log"
+nohup python -m http.server $1 > run_front.log 2>&1 &
+kill_id_2=$! 
+
+echo "Starting default web browser to view the interactive output. See the logs in browser_open_msg.log"
+
+nohup xdg-open http://localhost:$1/HTML%20file/NEST-vis.html > browser_open_msg.log &
+
+while true
+do
+  echo "Write STOP to stop the process: "
+  read varname
+  if [ $varname = "STOP" ]
+    then 
+      echo "Killing the backend and fronend processes."
+      kill $kill_id_1
+      kill $kill_id_2
+      break   
+  fi
+done
