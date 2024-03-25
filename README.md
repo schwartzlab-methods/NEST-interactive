@@ -1,5 +1,14 @@
 # ![alt text](https://github.com/schwartzlab-methods/nest-interactive/blob/main/nest_logo.svg) NEST-Interactive
-
+## The required python packages are:
+  ```
+  django
+  numpy
+  scipy
+  matplotlib
+  pandas
+  altair
+  django-cors-headers
+  ```
 ## Instructions:
 Navigate into the pulled nest_interactive directory. Please run the following command with three arguments:
 1. Desired port to run the frontend, e.g., 8080
@@ -10,6 +19,7 @@ Navigate into the pulled nest_interactive directory. Please run the following co
 bash nest_interactive 8080 server/data/files/ PDAC_64630
 ````
 
+However, if you are interested to run the frontend and backend separately, you can follow the instructions below. 
 ### Frontend:
 
 1. If VSCode is installed, adding the "Live Server" extension from Ritwick Dey makes spinning up a server easy. Access the server hosted at http://127.0.0.1:5500/HTML%20file/NEST-vis.html
