@@ -20,7 +20,8 @@ bash nest_interactive 8080 server/data/files/ PDAC_64630
 ````
 
 However, if you are interested to run the frontend and backend separately, you can follow the instructions below. 
-### Frontend:
+
+#### Frontend:
 
 1. If VSCode is installed, adding the "Live Server" extension from Ritwick Dey makes spinning up a server easy. Access the server hosted at http://127.0.0.1:5500/HTML%20file/NEST-vis.html
 2. Otherwise
@@ -28,7 +29,7 @@ However, if you are interested to run the frontend and backend separately, you c
    - Open http://localhost and navigate to "HTML file" then "NEST-vis.html"
    - Server should be hosted at http://localhost/HTML%20file/NEST-vis.html
 
-### Backend:
+#### Backend:
 
 - Navigate into the server directory (`cd server`)
 - Install pipenv
