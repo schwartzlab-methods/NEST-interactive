@@ -17,11 +17,11 @@ with open(".env", "r") as f:
     data_name = f.readline().split("=")[1] # PDAC_64630, animal_id1
 
 def get_num_edge(request):
-    df = pd.read_csv(current_directory+'NEST_combined_rank_product_output_'+data_name+'_top20percent.csv', sep=",")
+    df = pd.read_csv(current_directory+'NEST_'+data_name+'_top20percent.csv', sep=",")
     return HttpResponse(len(df.index))
 
 def get_vertex_types(request):
-    pathologist_label_file=current_directory+'IX_annotation_artifacts.csv' 
+    pathologist_label_file=current_directory+data_name+'_annotation.csv' 
     pathologist_label=[]
     with open(pathologist_label_file) as file:
         csv_file = csv.reader(file, delimiter=",")
@@ -52,9 +52,9 @@ def load_json(request, edge):
         coordinates[i,2] = temp[2][i] # z
     
     self_loop_found = []
-    self_loop_path = Path(current_directory+'self_loop_record_'+data_name+'.gz')
+    self_loop_path = Path(current_directory+data_name+'self_loop_record'+'.gz')
     if self_loop_path.is_file():
-        with gzip.open(current_directory+'self_loop_record_'+data_name+'.gz', 'rb') as fp:
+        with gzip.open(current_directory+data_name+'self_loop_record'+'.gz', 'rb') as fp:
             self_loop_found = pickle.load(fp)
     ##################### make cell metadata: barcode_info ###################################
     i=0
@@ -70,7 +70,7 @@ def load_json(request, edge):
         i=i+1
     
     ####### load annotations ##############################################
-    pathologist_label_file=current_directory+'IX_annotation_artifacts.csv' 
+    pathologist_label_file=current_directory+data_name+'_annotation.csv' 
     pathologist_label=[]
     with open(pathologist_label_file) as file:
         csv_file = csv.reader(file, delimiter=",")
@@ -83,7 +83,7 @@ def load_json(request, edge):
         
     ######################### read the NEST output in csv format ####################################################
     
-    filename_str = 'NEST_combined_rank_product_output_'+data_name+'_top20percent.csv'
+    filename_str = 'NEST_'+data_name+'_top20percent.csv'
     inFile = current_directory +filename_str 
     df = pd.read_csv(inFile, sep=",")
     
