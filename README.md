@@ -55,6 +55,5 @@ However, if you are interested to run the frontend and backend separately, you c
   altair
   django-cors-headers
   ```
-
-- OPTIONAL: To use your own input files, upload them in a directory under server/data. Note that the name of this directory is referred to as *DIRECTORY_NAME* and the common identifier across file names is referred to as *FILE_IDENTIFIER* (e.g. cell_barcode_**PDAC_64630**). For custom data, run `python ./manage.py setdata DIRECTORY_NAME FILE_IDENTIFIER`. To return to default, run `python ./manage.py setdata ./data/files/ PDAC_64630`
+- Run `python ./manage.py setdata DIRECTORY_NAME
 - Run `python ./manage.py runserver`
