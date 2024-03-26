@@ -6,11 +6,11 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument("DIRECTORY_NAME", help="Name of the directory with input files")
-        parser.add_argument("FILE_IDENTIFIER", help="Common identifier across input files")
+        #parser.add_argument("FILE_IDENTIFIER", help="Common identifier across input files")
 
     def handle(self, *args, **options):
         with open(".env", "w") as f:
             f.write("DIRECTORY_NAME="+options["DIRECTORY_NAME"]+"\n")
-            f.write("FILE_IDENTIFIER="+options["FILE_IDENTIFIER"])
+            #f.write("FILE_IDENTIFIER="+options["FILE_IDENTIFIER"])
             f.close()
-        self.stdout.write("Saved: "+options["DIRECTORY_NAME"]+", "+options["FILE_IDENTIFIER"])
+        self.stdout.write("Saved: "+options["DIRECTORY_NAME"]) #+", "+options["FILE_IDENTIFIER"])
