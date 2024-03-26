@@ -2,16 +2,14 @@
 
 
 # running the server
-cd server
 echo "Starting backend. See the logs in run_server.log"
-python ./manage.py setdata $2 $3 
-nohup python ./manage.py runserver > ../run_server.log  2>&1 &
+python3 ./server/manage.py setdata $2 
+nohup python3 ./server/manage.py runserver > run_server.log  2>&1 &
 kill_id_1=$!
 
 # running the frontend
-cd ..
 echo "Starting frontend. See the logs in run_front.log"
-nohup python -m http.server $1 > run_front.log 2>&1 &
+nohup python3 -m http.server $1 > run_front.log 2>&1 &
 kill_id_2=$! 
 
 echo "Starting default web browser to view the interactive output. See the logs in browser_open_msg.log"
