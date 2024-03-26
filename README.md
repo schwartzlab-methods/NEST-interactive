@@ -1,5 +1,24 @@
 # ![alt text](https://github.com/schwartzlab-methods/nest-interactive/blob/main/nest_logo.svg) NEST-Interactive
-## Used python packages:
+
+NEST-Interactive is an interacive exploration tool for
+[NEST](https://github.com/schwartzlab-methods/NEST) output.
+
+## Zoom and pan exploration
+![](img/nest_zoom_small.gif)
+
+## Ligand-Receptor pair filtering
+![](img/nest_select_small.gif)
+
+## Vertex (spot or cell) color changing
+![](img/nest_node_color_small.gif)
+
+## Communication color changing
+![](img/nest_edge_color_small.gif)
+
+## Increase range of reliable signals
+![](img/nest_edge_increase_small.gif)
+
+## Python package dependencies:
   ```
   django
   numpy
