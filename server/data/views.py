@@ -10,18 +10,37 @@ from scipy.sparse import csr_matrix
 import pandas as pd
 import gzip
 from scipy.sparse.csgraph import connected_components
-
+import os
 ####################### Set the name of the sample you want to visualize #####################################
-with open(".env", "r") as f:
+with open("server/.env", "r") as f:
     current_directory = f.readline().split("=")[1].removesuffix("\n") # ./data/files/, ./data/3D_files/
-    data_name = f.readline().split("=")[1] # PDAC_64630, animal_id1
+    #data_name = f.readline().split("=")[1] # PDAC_64630, animal_id1
 
 def get_num_edge(request):
-    df = pd.read_csv(current_directory+'NEST_'+data_name+'_top20percent.csv', sep=",")
+    
+    items = os.listdir(os.path.abspath(current_directory))
+    filename = ""
+    for names in items:
+        if names.endswith("percent.csv"):
+            filename=names
+            break
+
+    df = pd.read_csv(current_directory+filename, sep=",") 
+    #df = pd.read_csv(current_directory+'NEST_'+data_name+'_top20percent.csv', sep=",")
     return HttpResponse(len(df.index))
 
 def get_vertex_types(request):
-    pathologist_label_file=current_directory+data_name+'_annotation.csv' 
+
+    items = os.listdir(os.path.abspath(current_directory))
+    filename = ""
+    for names in items:
+        if names.endswith("annotation.csv"):
+            filename=names
+            break
+
+
+
+    pathologist_label_file=current_directory + filename #data_name+'_annotation.csv' 
     pathologist_label=[]
     with open(pathologist_label_file) as file:
         csv_file = csv.reader(file, delimiter=",")
@@ -41,20 +60,54 @@ def load_json(request, edge):
     top_edge_count = edge
     
     ######################## read data in csv format ########################################
-    cell_barcode = pd.read_csv(current_directory+'cell_barcode_'+data_name+'.csv', header=None)
-    cell_barcode = list(cell_barcode[0]) # first column is: cell barcode. Convert it to list format for conveniance
     
-    temp = pd.read_csv(current_directory+'coordinates_'+data_name+'.csv', header=None)
+    items = os.listdir(os.path.abspath(current_directory))
+    filename = ""
+    for names in items:
+        if names.startswith("cell_barcode"):
+            filename=names
+            break   
+    
+    
+    
+    cell_barcode = pd.read_csv(current_directory + filename, header=None) 
+    #pd.read_csv(current_directory+'cell_barcode_'+data_name+'.csv', header=None)
+    cell_barcode = list(cell_barcode[0]) # first column is: cell barcode. Convert it to list format for conveniance
+    ############################################
+    
+    items = os.listdir(os.path.abspath(current_directory))
+    filename = ""
+    for names in items:
+        if names.startswith("coordinates"):
+            filename=names
+            break
+                
+    
+    temp = pd.read_csv(current_directory + filename, header=None)
+    # pd.read_csv(current_directory+'coordinates_'+data_name+'.csv', header=None)
     coordinates = np.zeros((len(cell_barcode), 3)) # num_cells x coordinate
     for i in range (0, len(temp)):
         coordinates[i,0] = temp[0][i] # x
         coordinates[i,1] = temp[1][i] # y
         coordinates[i,2] = temp[2][i] # z
     
+    
+    ############################################
+    items = os.listdir(os.path.abspath(current_directory))
+    filename = ""
+    for names in items:
+        if names.endswith("self_loop_record"):
+            filename=names
+            break   
+    
+    
+    
     self_loop_found = []
-    self_loop_path = Path(current_directory+data_name+'_self_loop_record'+'.gz')
+    self_loop_path = Path(current_directory + filename)
+    # Path(current_directory+data_name+'_self_loop_record'+'.gz')
     if self_loop_path.is_file():
-        with gzip.open(current_directory+data_name+'_self_loop_record'+'.gz', 'rb') as fp:
+        with gzip.open(current_directory + filename, 'rb') as fp:
+        #gzip.open(current_directory+data_name+'_self_loop_record'+'.gz', 'rb') as fp:
             self_loop_found = pickle.load(fp)
     ##################### make cell metadata: barcode_info ###################################
     i=0
@@ -70,8 +123,17 @@ def load_json(request, edge):
         i=i+1
     
     ####### load annotations ##############################################
-    pathologist_label_file=current_directory+data_name+'_annotation.csv' 
-    pathologist_label=[]
+    
+    items = os.listdir(os.path.abspath(current_directory))
+    filename = ""
+    for names in items:
+        if names.endswith("annotation.csv"):
+            filename=names
+            break    
+    
+    
+    pathologist_label_file = current_directory + filename #data_name+'_annotation.csv' 
+    pathologist_label = []
     with open(pathologist_label_file) as file:
         csv_file = csv.reader(file, delimiter=",")
         for line in csv_file:
@@ -83,7 +145,14 @@ def load_json(request, edge):
         
     ######################### read the NEST output in csv format ####################################################
     
-    filename_str = 'NEST_'+data_name+'_top20percent.csv'
+    items = os.listdir(os.path.abspath(current_directory))
+    filename = ""
+    for names in items:
+        if names.endswith("percent.csv"):
+            filename=names
+            break
+    
+    filename_str = filename #'NEST_'+data_name+'_top20percent.csv' #'NEST_*_top20percent.csv' #
     inFile = current_directory +filename_str 
     df = pd.read_csv(inFile, sep=",")
     
@@ -228,3 +297,4 @@ def load_json(request, edge):
     jsonfile = json.dumps({"nodes": nodes, "links": links})
     response = HttpResponse(jsonfile, content_type='application/json')
     return response
+
