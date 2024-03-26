@@ -9,7 +9,7 @@ class Command(BaseCommand):
         #parser.add_argument("FILE_IDENTIFIER", help="Common identifier across input files")
 
     def handle(self, *args, **options):
-        with open(".env", "w") as f:
+        with open("server/.env", "w") as f:
             f.write("DIRECTORY_NAME="+options["DIRECTORY_NAME"]+"\n")
             #f.write("FILE_IDENTIFIER="+options["FILE_IDENTIFIER"])
             f.close()
