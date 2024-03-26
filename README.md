@@ -20,13 +20,13 @@ We need the following five files:
 Keep these five files under the same directory and use that directory path while running the interactive version as explained below.
 
 ## Instructions to run NEST Interactive:
-Navigate into the pulled nest_interactive directory. Please run the following command with three arguments:
+Navigate into the pulled nest_interactive directory. Please run the following command with two arguments:
 1. Desired port to run the frontend, e.g., 8080
 2. Path to the directory having NEST output and required metadata files, e.g., barcode, coordinates, etc.
-3. Name of the data that you want to visualize on the interactive nest, e.g., PDAC_64630 or V1_Human_Lymph_Node_spatial (the --data_name argument that is used during running the NEST model).
 
+A sample command is provided below: 
 ````
-bash nest_interactive 8080 server/data/files/ PDAC_64630
+bash nest_interactive 8080 server/data/files/ 
 ````
 
 However, if you are interested to run the frontend and backend separately, you can follow the instructions below. 
