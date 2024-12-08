@@ -1,7 +1,7 @@
 # ![alt text](https://github.com/schwartzlab-methods/cellnest-interactive/blob/main/nest_logo.svg) CellNEST-Interactive
 
 CellNEST-Interactive is an interacive exploration tool for
-[NEST](https://github.com/schwartzlab-methods/CellNEST) output.
+[CellNEST](https://github.com/schwartzlab-methods/CellNEST) output.
 
 ## Zoom and pan exploration
 ![](img/nest_zoom_small.gif)
@@ -39,13 +39,13 @@ We need the following five files:
 Keep these five files under the same directory and use that directory path (e.g., server/data/files/ ) while running the interactive version as explained below.
 
 ## Instructions to run CellNEST Interactive:
-Navigate into the pulled nest_interactive directory. Please run the following command with two arguments:
+Navigate into the pulled cellnest_interactive directory. Please run the following command with two arguments:
 1. Desired port to run the frontend, e.g., 8080
 2. Path to the directory having CellNEST output and required metadata files, e.g., barcode, coordinates, etc.
 
 A sample command is provided below: 
 ````
-bash nest_interactive 8080 server/data/files/ 
+bash cellnest_interactive 8080 server/data/files/ 
 ````
 
 However, if you are interested to run the frontend and backend separately, you can follow the instructions below. 
