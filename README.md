@@ -1,7 +1,7 @@
-# ![alt text](https://github.com/schwartzlab-methods/nest-interactive/blob/main/nest_logo.svg) CellNEST-Interactive
+# ![alt text](https://github.com/schwartzlab-methods/cellnest-interactive/blob/main/nest_logo.svg) CellNEST-Interactive
 
 CellNEST-Interactive is an interacive exploration tool for
-[NEST](https://github.com/schwartzlab-methods/NEST) output.
+[NEST](https://github.com/schwartzlab-methods/CellNEST) output.
 
 ## Zoom and pan exploration
 ![](img/nest_zoom_small.gif)
