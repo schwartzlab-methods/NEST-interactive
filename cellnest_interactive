@@ -14,7 +14,7 @@ kill_id_2=$!
 
 echo "Starting default web browser to view the interactive output. See the logs in browser_open_msg.log"
 
-nohup xdg-open http://localhost:$1/HTML%20file/NEST-vis.html > browser_open_msg.log &
+nohup xdg-open http://localhost:$1/HTML%20file/CellNEST-vis.html > browser_open_msg.log &
 
 while true
 do

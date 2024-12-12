@@ -26,7 +26,6 @@ def get_num_edge(request):
             break
 
     df = pd.read_csv(current_directory+filename, sep=",") 
-    #df = pd.read_csv(current_directory+'NEST_'+data_name+'_top20percent.csv', sep=",")
     return HttpResponse(len(df.index))
 
 def get_vertex_types(request):
@@ -143,7 +142,7 @@ def load_json(request, edge):
     for i in range (1, len(pathologist_label)):
         barcode_type[pathologist_label[i][0]] = pathologist_label[i][1]
         
-    ######################### read the NEST output in csv format ####################################################
+    ######################### read the CellNEST output in csv format ####################################################
     
     items = os.listdir(os.path.abspath(current_directory))
     filename = ""
@@ -152,7 +151,7 @@ def load_json(request, edge):
             filename=names
             break
     
-    filename_str = filename #'NEST_'+data_name+'_top20percent.csv' #'NEST_*_top20percent.csv' #
+    filename_str = filename
     inFile = current_directory +filename_str 
     df = pd.read_csv(inFile, sep=",")
     

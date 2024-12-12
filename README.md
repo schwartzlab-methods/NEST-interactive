@@ -1,22 +1,22 @@
-# ![alt text](https://github.com/schwartzlab-methods/cellnest-interactive/blob/main/nest_logo.svg) CellNEST-Interactive
+# ![alt text](https://github.com/schwartzlab-methods/cellnest-interactive/blob/main/cellnest_logo.svg) CellNEST-Interactive
 
 CellNEST-Interactive is an interacive exploration tool for
 [CellNEST](https://github.com/schwartzlab-methods/CellNEST) output.
 
 ## Zoom and pan exploration
-![](img/nest_zoom_small.gif)
+![](img/cell_nest_zoom_small.gif)
 
 ## Ligand-Receptor pair filtering
-![](img/nest_select_small.gif)
+![](img/cell_nest_select_small.gif)
 
 ## Vertex (spot or cell) color changing
-![](img/nest_node_color_small.gif)
+![](img/cell_nest_node_color_small.gif)
 
 ## Communication color changing
-![](img/nest_edge_color_small.gif)
+![](img/cell_nest_edge_color_small.gif)
 
 ## Increase range of reliable signals
-![](img/nest_edge_increase_small.gif)
+![](img/cell_nest_edge_increase_small.gif)
 
 ## Python package dependencies:
   ```
@@ -52,11 +52,11 @@ However, if you are interested to run the frontend and backend separately, you c
 
 #### Frontend:
 
-1. If VSCode is installed, adding the "Live Server" extension from Ritwick Dey makes spinning up a server easy. Access the server hosted at http://127.0.0.1:5500/HTML%20file/NEST-vis.html
+1. If VSCode is installed, adding the "Live Server" extension from Ritwick Dey makes spinning up a server easy. Access the server hosted at http://127.0.0.1:5500/HTML%20file/CellNEST-vis.html
 2. Otherwise
    - Run `python -m http.server 8080` from the root directory
-   - Open http://localhost and navigate to "HTML file" then "NEST-vis.html"
-   - Server should be hosted at http://localhost/HTML%20file/NEST-vis.html
+   - Open http://localhost and navigate to "HTML file" then "CellNEST-vis.html"
+   - Server should be hosted at http://localhost/HTML%20file/CellNEST-vis.html
 
 #### Backend:
 
