@@ -67,8 +67,8 @@ However, if you are interested to run the frontend and backend separately, you c
 1. If VSCode is installed, adding the "Live Server" extension from Ritwick Dey makes spinning up a server easy. Access the server hosted at http://127.0.0.1:5500/HTML%20file/CellNEST-vis.html
 2. Otherwise
    - Run `python -m http.server 8080` from the root directory
-   - Open http://localhost and navigate to "HTML file" then "CellNEST-vis.html"
-   - Server should be hosted at http://localhost/HTML%20file/CellNEST-vis.html
+   - Open http://localhost:8080/ and navigate to "HTML file" then "CellNEST-vis.html"
+   - Server should be hosted at http://localhost:8080/HTML%20file/CellNEST-vis.html
 
 #### Backend:
 
