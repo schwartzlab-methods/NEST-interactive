@@ -89,5 +89,5 @@ However, if you are interested to run the frontend and backend separately, you c
   ```
 
 - Run `cd ..`
-- Run `python ./manage.py setdata server/data/files/`
-- Run `python ./manage.py runserver`
+- Run `python ./server/manage.py setdata server/data/files/`
+- Run `python ./server/manage.py runserver`
