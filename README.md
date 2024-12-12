@@ -47,7 +47,7 @@ We need the following five files:
 
 Keep these five files under the same directory and use that directory path (e.g., server/data/files/ ) while running the interactive version as explained below.
 
-## Instructions to run CellNEST Interactive:
+## Instructions to run CellNEST-Interactive:
 
 Navigate into the pulled cellnest_interactive directory. Please run the following command with two arguments:
 
